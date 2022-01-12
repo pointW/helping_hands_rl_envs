@@ -174,20 +174,40 @@ class CloseLoopEnv(PyBulletEnv):
       [np.array([gripper_state]), scaled_gripper_pos, np.array([scaled_gripper_rz]), scaled_obj_poses])
     return obs
 
+  # def _getObservation(self, action=None):
+  #   ''''''
+  #   if self.obs_type is 'pixel':
+  #     self.heightmap = self._getHeightmap()
+  #     gripper_img = self.getGripperImg()
+  #     heightmap = self.heightmap
+  #     if self.view_type.find('height') > -1:
+  #       gripper_pos = self.robot._getEndEffectorPosition()
+  #       heightmap[gripper_img == 1] = gripper_pos[2]
+  #     else:
+  #       heightmap[gripper_img == 1] = 0
+  #     heightmap = heightmap.reshape([1, self.heightmap_size, self.heightmap_size])
+  #     # gripper_img = gripper_img.reshape([1, self.heightmap_size, self.heightmap_size])
+  #     return self._isHolding(), None, heightmap
+  #   else:
+  #     obs = self._getVecObservation()
+  #     return self._isHolding(), None, obs
+
   def _getObservation(self, action=None):
     ''''''
     if self.obs_type is 'pixel':
       self.heightmap = self._getHeightmap()
-      gripper_img = self.getGripperImg()
       heightmap = self.heightmap
-      if self.view_type.find('height') > -1:
-        gripper_pos = self.robot._getEndEffectorPosition()
-        heightmap[gripper_img == 1] = gripper_pos[2]
-      else:
-        heightmap[gripper_img == 1] = 0
       heightmap = heightmap.reshape([1, self.heightmap_size, self.heightmap_size])
-      # gripper_img = gripper_img.reshape([1, self.heightmap_size, self.heightmap_size])
-      return self._isHolding(), None, heightmap
+      gripper_pos = self.robot._getEndEffectorPosition()
+      gripper_img = self.getGripperImg()
+      gripper_img = gripper_img.reshape([1, self.heightmap_size, self.heightmap_size])
+      if self.view_type.find('height') > -1:
+        gripper_img *= gripper_pos[2]
+      else:
+        gripper_img = 1-gripper_img
+        gripper_img *= gripper_pos[2]
+      obs = np.concatenate([heightmap, gripper_img])
+      return self._isHolding(), None, obs
     else:
       obs = self._getVecObservation()
       return self._isHolding(), None, obs
