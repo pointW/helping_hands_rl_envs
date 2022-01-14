@@ -48,7 +48,7 @@ class Renderer(object):
 
   def getTopDownDepth(self, target_size, img_size, gripper_pos, gripper_rz):
     if self.points.shape[0] == 0:
-      self.getNewPointCloud(512)
+      self.getNewPointCloud(320)
       self.points = self.points[self.points[:, 2] <= max(gripper_pos[2]-0.01, 0.05)]
     points = np.copy(self.points)
     points = points[points[:, 2] <= max(gripper_pos[2]-0.01, 0.05)]
