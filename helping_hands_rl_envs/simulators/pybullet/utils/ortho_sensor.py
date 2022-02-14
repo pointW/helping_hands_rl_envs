@@ -1,6 +1,5 @@
 import pybullet as pb
 import numpy as np
-import cupy as cp
 from helping_hands_rl_envs.simulators.pybullet.utils.sensor import Sensor
 
 class OrthographicSensor(Sensor):
