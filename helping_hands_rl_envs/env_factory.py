@@ -93,6 +93,8 @@ def createMultiprocessEnvs(num_processes, simulator, env_type, env_config, plann
         config['seed'] = config['seed'] + i if 'seed' in config else npr.randint(1000)
     else:
       env_config['seed'] = env_config['seed'] + i if 'seed' in env_config else npr.randint(1000)
+      if i == 0:
+        env_config['render'] = True
 
   # Create the various environments
   env_func = getEnvFn(simulator, env_type)

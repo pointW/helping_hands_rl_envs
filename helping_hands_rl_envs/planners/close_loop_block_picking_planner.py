@@ -11,7 +11,8 @@ class CloseLoopBlockPickingPlanner(CloseLoopPlanner):
   def getNextAction(self):
     if not self.env._isHolding():
       block_pos = self.env.objects[0].getPosition()
-      block_rot = transformations.euler_from_quaternion(self.env.objects[0].getRotation())
+      block_rot = list(transformations.euler_from_quaternion(self.env.objects[0].getRotation()))
+      # block_rot[2] -= np.pi/2
 
       x, y, z, r = self.getActionByGoalPose(block_pos, block_rot)
 

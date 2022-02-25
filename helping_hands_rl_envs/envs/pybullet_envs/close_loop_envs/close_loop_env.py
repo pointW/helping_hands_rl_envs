@@ -79,6 +79,24 @@ class CloseLoopEnv(PyBulletEnv):
       done = self.current_episode_steps >= self.max_steps
     self.current_episode_steps += 1
 
+    self.steps += 1
+    if done:
+      self.episode_return.append(reward)
+
+    # ep_id = self.ep_id
+    # st_id = self.st_id
+    # sr_id = self.sr_id
+    # success = int(sum(self.episode_return[-20:]) if len(self.episode_return) > 0 else 0)
+    # total = min(20, len(self.episode_return))
+    # sr = int(100 * success / total if total > 0 else 0)
+    # self.st_id = pb.addUserDebugText('Step: {}'.format(self.steps), [0.1, -0.71, 0.72], [0, 0, 0], 2)
+    # self.ep_id = pb.addUserDebugText('Episode: {}'.format(len(self.episode_return)), [0.1, -0.743, 0.68], [0, 0, 0], 2)
+    # self.sr_id = pb.addUserDebugText('SR pre20: {}% ({}/{})'.format(sr, success, total), [0.1, -0.78, 0.635], [0, 0, 0], 2)
+    # if ep_id is not None:
+    #   pb.removeUserDebugItem(ep_id)
+    #   pb.removeUserDebugItem(sr_id)
+    #   pb.removeUserDebugItem(st_id)
+
     return obs, reward, done
 
   def setRobotHoldingObj(self):

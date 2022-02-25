@@ -21,6 +21,8 @@ class Brick(PybulletObject):
     self.original_size = 0.05
     self.size = 0.05 * scale
 
+    pb.changeVisualShape(object_id, -1, rgbaColor=[1, 165/255, 0, 1])
+
   def getHeight(self):
     return self.size
 

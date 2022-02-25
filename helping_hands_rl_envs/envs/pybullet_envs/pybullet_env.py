@@ -40,12 +40,26 @@ class PyBulletEnv(BaseEnv):
     if config['render']:
       self.client = pb.connect(pb.GUI)
       # For screenshotting envs
+      pb.configureDebugVisualizer(pb.COV_ENABLE_GUI, 0)
+      pb.resetDebugVisualizerCamera(
+          cameraDistance=1.1,
+          cameraYaw=90,
+          cameraPitch=-40,
+          cameraTargetPosition=[0, 0, 0])
+
+      # pb.configureDebugVisualizer(pb.COV_ENABLE_GUI, 0)
+      # pb.resetDebugVisualizerCamera(
+      #     cameraDistance=0.7,
+      #     cameraYaw=90,
+      #     cameraPitch=-89.999,
+      #     cameraTargetPosition=[0.5, 0, 0])
+
       # pb.configureDebugVisualizer(pb.COV_ENABLE_GUI, 0)
       # pb.resetDebugVisualizerCamera(
       #     cameraDistance=1.1,
       #     cameraYaw=90,
-      #     cameraPitch=-40,
-      #     cameraTargetPosition=[0, 0, 0])
+      #     cameraPitch=-89.999,
+      #     cameraTargetPosition=[0.5, 0, 0])
     else:
       self.client = pb.connect(pb.DIRECT)
     pb.setAdditionalSearchPath(pybullet_data.getDataPath())
@@ -137,6 +151,11 @@ class PyBulletEnv(BaseEnv):
     self.last_obj = None
     self.state = {}
     self.pb_state = None
+    self.steps = 0
+    self.episode_return = []
+    self.st_id = None
+    self.ep_id = None
+    self.sr_id = None
 
   def initialize(self):
     ''''''
@@ -149,7 +168,7 @@ class PyBulletEnv(BaseEnv):
     pb.setGravity(0, 0, -10)
 
     # TODO: These might have to be in the config depending on how they effect the solver_residual_threshold
-    self.table_id = pb.loadURDF('plane.urdf', [0,0,0])
+    self.table_id = pb.loadURDF('plane.urdf', [0.5,0,0])
     pb.changeDynamics(self.table_id, -1, linearDamping=0.04, angularDamping=0.04, restitution=0, contactStiffness=3000, contactDamping=100)
 
     # Load the UR5 and set it to the home positions
@@ -165,6 +184,9 @@ class PyBulletEnv(BaseEnv):
 
     # Step simulation
     pb.stepSimulation()
+    import time
+    if self.seed == 0:
+      pb.startStateLogging(pb.STATE_LOGGING_VIDEO_MP4, '/home/dian/Videos/{}.mp4'.format(time.time()))
 
   def resetPybulletEnv(self):
     # soft reset has bug in older pybullet versions. 2.7,1 works good

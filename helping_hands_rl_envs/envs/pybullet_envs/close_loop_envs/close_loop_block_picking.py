@@ -12,8 +12,80 @@ class CloseLoopBlockPickingEnv(CloseLoopEnv):
 
   def reset(self):
     self.resetPybulletEnv()
-    self.robot.moveTo([self.workspace[0].mean(), self.workspace[1].mean(), 0.2], transformations.quaternion_from_euler(0, 0, 0))
-    self._generateShapes(constants.CUBE, 1, random_orientation=self.random_orientation)
+    # self.robot.moveTo([self.workspace[0].mean(), self.workspace[1][0], 0.2], transformations.quaternion_from_euler(0, 0, 0))
+    self.robot.moveTo([self.workspace[0].mean(), self.workspace[1].mean(), 0.2],
+                      transformations.quaternion_from_euler(0, 0, -np.pi / 2), dynamic=False)
+    cube_pos = [0.4, -0.1, 0.025]
+    cube_rot = transformations.quaternion_from_euler(0, 0, 0)
+    self._generateShapes(constants.BRICK, 1, pos=[cube_pos], rot=[cube_rot])
+
+    # for id in range(-1, 9):
+    #   pb.changeVisualShape(self.robot.id, id, rgbaColor=[0, 0, 0, 0])
+    # pb.changeVisualShape(self.robot.id, 11, rgbaColor=[0, 0, 0, 0])
+
+    # step = 100
+    # d_dis = 0.7-1.1
+    # d_pitch = -89.999 - -40
+    # d_x = 0.5 - 0.
+    # import time
+    # for i in range(step+1):
+    #   pb.resetDebugVisualizerCamera(
+    #     cameraDistance=1.1 + i*d_dis/step,
+    #     cameraYaw=90,
+    #     cameraPitch=-40 + i*d_pitch/step,
+    #     cameraTargetPosition=[0+i*d_x/step, 0, 0])
+    #   time.sleep(0.01)
+    #
+    import time
+    time.sleep(0.5)
+
+    total = 5000
+    for i in range(total):
+      d = 0.2/total * (i+1)
+      ws_center = np.array([self.workspace[0].mean(), self.workspace[1].mean()])
+      robot_xy = np.array([self.workspace[0].mean(), self.workspace[1].mean()+d])
+      self.robot.moveTo([robot_xy[0], robot_xy[1], 0.2], transformations.quaternion_from_euler(0, 0, -np.pi / 2),
+                        dynamic=False)
+
+      cube_xy = np.array([cube_pos[0], cube_pos[1]+d])
+      self.objects[0].resetPose([cube_xy[0], cube_xy[1], 0.025], transformations.quaternion_from_euler(0, 0, 0))
+      pb.stepSimulation()
+
+    for i in range(total):
+      d = 0.2 - 0.2/total * (i+1)
+      ws_center = np.array([self.workspace[0].mean(), self.workspace[1].mean()])
+      robot_xy = np.array([self.workspace[0].mean(), self.workspace[1].mean()+d])
+      self.robot.moveTo([robot_xy[0], robot_xy[1], 0.2], transformations.quaternion_from_euler(0, 0, -np.pi / 2),
+                        dynamic=False)
+
+      cube_xy = np.array([cube_pos[0], cube_pos[1]+d])
+      self.objects[0].resetPose([cube_xy[0], cube_xy[1], 0.025], transformations.quaternion_from_euler(0, 0, 0))
+      pb.stepSimulation()
+
+    for i in range(total):
+      r = 2*np.pi/4/total*(i+1)
+      ws_center = np.array([self.workspace[0].mean(), self.workspace[1].mean()])
+      robot_xy = np.array([self.workspace[0].mean(), self.workspace[1].mean()]) - ws_center
+      robot_xy = np.array([[np.cos(r), -np.sin(r)], [np.sin(r), np.cos(r)]]).dot(robot_xy) + ws_center
+      self.robot.moveTo([robot_xy[0], robot_xy[1], 0.2], transformations.quaternion_from_euler(0, 0, -np.pi/2+r), dynamic=False)
+
+      cube_xy = np.array(cube_pos[:2]) - ws_center
+      cube_xy = np.array([[np.cos(r), -np.sin(r)], [np.sin(r), np.cos(r)]]).dot(cube_xy) + ws_center
+      self.objects[0].resetPose([cube_xy[0], cube_xy[1], 0.025], transformations.quaternion_from_euler(0, 0, r))
+      pb.stepSimulation()
+
+    for i in range(total):
+      r = np.pi/2 - 2*np.pi/4/total*(i+1)
+      ws_center = np.array([self.workspace[0].mean(), self.workspace[1].mean()])
+      robot_xy = np.array([self.workspace[0].mean(), self.workspace[1].mean()]) - ws_center
+      robot_xy = np.array([[np.cos(r), -np.sin(r)], [np.sin(r), np.cos(r)]]).dot(robot_xy) + ws_center
+      self.robot.moveTo([robot_xy[0], robot_xy[1], 0.2], transformations.quaternion_from_euler(0, 0, -np.pi/2+r), dynamic=False)
+
+      cube_xy = np.array(cube_pos[:2]) - ws_center
+      cube_xy = np.array([[np.cos(r), -np.sin(r)], [np.sin(r), np.cos(r)]]).dot(cube_xy) + ws_center
+      self.objects[0].resetPose([cube_xy[0], cube_xy[1], 0.025], transformations.quaternion_from_euler(0, 0, r))
+      pb.stepSimulation()
+
     return self._getObservation()
 
   def _getValidOrientation(self, random_orientation):
