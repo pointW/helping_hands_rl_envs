@@ -20,8 +20,13 @@ class CloseLoopPlanner(BasePlanner):
     #               [np.sin(-current_rot[-1]), np.cos(-current_rot[-1])]])
     # pos_diff[:2] = R.dot(pos_diff[:2])
 
-    pos_diff[pos_diff // self.dpos > 0] = self.dpos
-    pos_diff[pos_diff // -self.dpos > 0] = -self.dpos
+    if pos_diff[2] > self.dpos:
+      pos_diff[2] = self.dpos
+    if pos_diff[2] < -self.dpos:
+      pos_diff[2] = -self.dpos
+
+    # pos_diff[pos_diff // self.dpos > 0] = self.dpos
+    # pos_diff[pos_diff // -self.dpos > 0] = -self.dpos
 
     rot_diff[rot_diff // self.drot > 0] = self.drot
     rot_diff[rot_diff // -self.drot > 0] = -self.drot
