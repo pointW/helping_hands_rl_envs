@@ -15,7 +15,7 @@ class TestBulletBowlStacking(unittest.TestCase):
                 'seed': 0, 'action_sequence': 'pxyzr', 'num_objects': 5, 'random_orientation': True,
                 'reward_type': 'sparse', 'simulate_grasp': True, 'perfect_grasp': False, 'robot': 'panda',
                 'workspace_check': 'point', 'physics_mode': 'fast', 'hard_reset_freq': 1000, 'object_scale_range': (0.8, 1),
-                'view_type': 'render_center_height', 'transparent_bin': False, 'collision_penalty': False}
+                'view_type': 'camera_fix', 'transparent_bin': False, 'collision_penalty': False}
 
   planner_config = {'random_orientation': True, 'dpos': 0.05, 'drot': np.pi/4}
 
@@ -38,13 +38,13 @@ class TestBulletBowlStacking(unittest.TestCase):
       # axs[1].imshow(obs[0, 1])
       # fig.show()
 
-      plt.imshow(obs[0, 0], vmin=0, vmax=0.25)
+      plt.imshow(obs[0, 0])
       plt.colorbar()
       plt.show()
       t0 = time.time()
-      (states_, in_hands_, obs_), rewards, dones = env.simulate(action)
-      plt.imshow(obs_[0, 0], vmin=0, vmax=0.25)
-      plt.show()
+      # (states_, in_hands_, obs_), rewards, dones = env.simulate(action)
+      # plt.imshow(obs_[0, 0], vmin=0, vmax=0.25)
+      # plt.show()
 
       (states_, in_hands_, obs_), rewards, dones = env.step(action, auto_reset=False)
       plt.imshow(obs_[0, 0], vmin=0, vmax=0.25)
