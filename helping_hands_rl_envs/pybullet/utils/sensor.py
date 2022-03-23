@@ -32,6 +32,13 @@ class Sensor(object):
 
     return np.abs(depth - np.max(depth)).reshape(size, size)
 
+  def getSegImg(self, size):
+    image_arr = pb.getCameraImage(width=size, height=size,
+                                  viewMatrix=self.view_matrix,
+                                  projectionMatrix=self.proj_matrix,
+                                  renderer=pb.ER_TINY_RENDERER)
+    return np.array(image_arr[4])
+
   def getPointCloud(self, size, to_numpy=True):
     image_arr = pb.getCameraImage(width=size, height=size,
                                   viewMatrix=self.view_matrix,

@@ -189,6 +189,8 @@ class BaseEnv:
     self.state = {}
     self.pb_state = None
 
+    self.view_type = config['view_type']
+
   def initialize(self):
     '''
     Initialize the pybullet world.
@@ -202,7 +204,7 @@ class BaseEnv:
     pb.setGravity(0, 0, -10)
 
     # TODO: These might have to be in the config depending on how they effect the solver_residual_threshold
-    self.table_id = pb.loadURDF('plane.urdf', [0,0,0])
+    self.table_id = pb.loadURDF('plane.urdf', [0,0,0.001])
     pb.changeDynamics(self.table_id, -1, linearDamping=0.04, angularDamping=0.04, restitution=0, contactStiffness=3000, contactDamping=100)
 
     # Load the UR5 and set it to the home positions
@@ -368,6 +370,11 @@ class BaseEnv:
     ''''''
     old_heightmap = copy.copy(self.heightmap)
     self.heightmap = self._getHeightmap()
+    if self.view_type == 'seg':
+      seg_img = self.getSegImg()
+      obs = np.stack([self.heightmap, seg_img])
+    else:
+      obs = self.heightmap.reshape(1, self.heightmap_size, self.heightmap_size)
 
     if action is None or self._isHolding() == False:
       in_hand_img = self.getEmptyInHand()
@@ -375,10 +382,15 @@ class BaseEnv:
       motion_primative, x, y, z, rot = self._decodeAction(action)
       in_hand_img = self.getInHandImage(old_heightmap, x, y, z, rot, self.heightmap)
 
-    return self._isHolding(), in_hand_img, self.heightmap.reshape([1, self.heightmap_size, self.heightmap_size])
+    return self._isHolding(), in_hand_img, obs
 
   def _getHeightmap(self):
     return self.sensor.getHeightmap(self.heightmap_size)
+
+  def getSegImg(self):
+    seg_img = self.sensor.getSegImg(self.heightmap_size)
+    seg_img[seg_img > 1] -= 1
+    return seg_img
 
   def _getValidPositions(self, border_padding, min_distance, existing_positions, num_shapes, sample_range=None):
     existing_positions_copy = copy.deepcopy(existing_positions)
