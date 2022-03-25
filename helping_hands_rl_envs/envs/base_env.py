@@ -373,6 +373,19 @@ class BaseEnv:
     if self.view_type == 'seg':
       seg_img = self.getSegImg()
       obs = np.stack([self.heightmap, seg_img])
+    elif self.view_type == 'seg_ran':
+      seg_img = self.getSegImg()
+      for i in range(seg_img.max(), -1, -1):
+        if not np.any(seg_img == i):
+          seg_img[seg_img > i] -= 1
+          i -= 1
+      ran_seg_img = np.zeros_like(seg_img)
+      ran_seq = np.arange(seg_img.max()+1)
+      np.random.shuffle(ran_seq)
+      for i in range(seg_img.max()+1):
+        ran_seg_img[seg_img == i] = ran_seq[i]
+      obs = np.stack([self.heightmap, ran_seg_img])
+
     else:
       obs = self.heightmap.reshape(1, self.heightmap_size, self.heightmap_size)
 
