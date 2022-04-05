@@ -375,10 +375,6 @@ class BaseEnv:
       obs = np.stack([self.heightmap, seg_img])
     elif self.view_type == 'seg_ran':
       seg_img = self.getSegImg()
-      for i in range(seg_img.max(), -1, -1):
-        if not np.any(seg_img == i):
-          seg_img[seg_img > i] -= 1
-          i -= 1
       ran_seg_img = np.zeros_like(seg_img)
       ran_seq = np.arange(seg_img.max()+1)
       np.random.shuffle(ran_seq)
@@ -402,7 +398,10 @@ class BaseEnv:
 
   def getSegImg(self):
     seg_img = self.sensor.getSegImg(self.heightmap_size)
-    seg_img[seg_img > 1] -= 1
+    for i in range(seg_img.max(), -1, -1):
+      if not np.any(seg_img == i):
+        seg_img[seg_img > i] -= 1
+        i -= 1
     return seg_img
 
   def _getValidPositions(self, border_padding, min_distance, existing_positions, num_shapes, sample_range=None):
