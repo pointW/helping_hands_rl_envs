@@ -6,6 +6,7 @@ from helping_hands_rl_envs.pybullet.utils import constants
 from helping_hands_rl_envs.planners.close_loop_block_in_bowl_planner import CloseLoopBlockInBowlPlanner
 from helping_hands_rl_envs.pybullet.utils.constants import NoValidPositionException
 from helping_hands_rl_envs.pybullet.equipments.tray import Tray
+import matplotlib.pyplot as plt
 
 class CloseLoopBlockInBowlEnv(CloseLoopEnv):
   def __init__(self, config):
@@ -15,8 +16,8 @@ class CloseLoopBlockInBowlEnv(CloseLoopEnv):
 
   def initialize(self):
     super().initialize()
-    self.tray.initialize(pos=[self.workspace[0].mean(), self.workspace[1].mean(), 0],
-                         size=[self.bin_size, self.bin_size, 0.1])
+    # self.tray.initialize(pos=[self.workspace[0].mean(), self.workspace[1].mean(), 0],
+    #                      size=[self.bin_size, self.bin_size, 0.1])
 
   def reset(self):
     while True:
@@ -63,7 +64,7 @@ if __name__ == '__main__':
   env_config = {'workspace': workspace, 'max_steps': 100, 'obs_size': 128, 'render': True, 'fast_mode': True,
                 'seed': 2, 'action_sequence': 'pxyzr', 'num_objects': 1, 'random_orientation': False,
                 'reward_type': 'step_left', 'simulate_grasp': True, 'perfect_grasp': False, 'robot': 'panda',
-                'object_init_space_check': 'point', 'physics_mode': 'fast', 'object_scale_range': (1, 1), 'hard_reset_freq': 1000}
+                'object_init_space_check': 'point', 'physics_mode': 'fast', 'object_scale_range': (1, 1), 'hard_reset_freq': 1000, "view_type": 'render_center_height'}
   planner_config = {'random_orientation': False, 'dpos': 0.05, 'drot': np.pi/4}
   env_config['seed'] = 1
   env = CloseLoopBlockInBowlEnv(env_config)

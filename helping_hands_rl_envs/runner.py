@@ -176,9 +176,11 @@ class MultiRunner(object):
   def canSimulate(self):
     for remote in self.remotes:
       remote.send(('can_simulate', None))
-    flag = [remote.recv() for remote in self.remotes]
+    flag1 = [remote.recv() for remote in self.remotes]
+    flag, debug_flag = zip(*flag1)
     flag = np.stack(flag)
-    return flag
+    debug_flag = np.stack(debug_flag)
+    return flag, debug_flag
 
   def resetSimPose(self):
     for remote in self.remotes:

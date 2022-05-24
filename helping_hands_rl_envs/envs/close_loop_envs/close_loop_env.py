@@ -38,7 +38,7 @@ class CloseLoopEnv(BaseEnv):
     self.obs_size_m = self.workspace_size * self.view_scale
     self.initSensor()
 
-    self.simulate_z_threshold = self.workspace[2][0] + 0.07
+    self.simulate_z_threshold = self.workspace[2][0] + 0.04
 
     self.simulate_pos = None
     self.simulate_rot = None
@@ -236,7 +236,8 @@ class CloseLoopEnv(BaseEnv):
 
   def canSimulate(self):
     # pos = list(self.robot._getEndEffectorPosition())
-    return not self._isHolding() and self.simulate_pos[2] > self.simulate_z_threshold
+    debug_flag = [self._isHolding(), self.simulate_pos[2] > self.simulate_z_threshold, self.simulate_pos[2], self.simulate_z_threshold]
+    return not self._isHolding() and self.simulate_pos[2] > self.simulate_z_threshold, debug_flag
 
   def getGripperImg(self, gripper_state=None, gripper_rz=None):
     if gripper_state is None:
