@@ -11,19 +11,20 @@ class CloseLoopBlockInBowlEnv(CloseLoopEnv):
   def __init__(self, config):
     super().__init__(config)
     self.bin_size = 0.25
-    self.tray = Tray()
+    # self.tray = Tray()
 
   def initialize(self):
     super().initialize()
-    self.tray.initialize(pos=[self.workspace[0].mean(), self.workspace[1].mean(), 0],
-                         size=[self.bin_size, self.bin_size, 0.1])
+    # self.tray.initialize(pos=[self.workspace[0].mean(), self.workspace[1].mean(), 0],
+    #                      size=[self.bin_size, self.bin_size, 0.1])
 
   def reset(self):
     while True:
       self.resetPybulletWorkspace()
       try:
         self._generateShapes(constants.CUBE, 1, random_orientation=self.random_orientation)
-        self._generateShapes(constants.BOWL, 1, scale=0.76, random_orientation=self.random_orientation)
+        # self._generateShapes(constants.BOWL, 1, scale=0.76, random_orientation=self.random_orientation)
+        self._generateShapes(constants.BOWL, 1, scale=0.88, random_orientation=self.random_orientation)
       except NoValidPositionException as e:
         continue
       else:
@@ -63,7 +64,7 @@ if __name__ == '__main__':
   env_config = {'workspace': workspace, 'max_steps': 100, 'obs_size': 128, 'render': True, 'fast_mode': True,
                 'seed': 2, 'action_sequence': 'pxyzr', 'num_objects': 1, 'random_orientation': False,
                 'reward_type': 'step_left', 'simulate_grasp': True, 'perfect_grasp': False, 'robot': 'panda',
-                'object_init_space_check': 'point', 'physics_mode': 'fast', 'object_scale_range': (1, 1), 'hard_reset_freq': 1000}
+                'object_init_space_check': 'point', 'physics_mode': 'fast', 'object_scale_range': (1, 1), 'hard_reset_freq': 1000, "view_type": 'render_center'}
   planner_config = {'random_orientation': False, 'dpos': 0.05, 'drot': np.pi/4}
   env_config['seed'] = 1
   env = CloseLoopBlockInBowlEnv(env_config)

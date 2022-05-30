@@ -254,8 +254,10 @@ class CloseLoopEnv(BaseEnv):
       raise NotImplementedError
     d = int(gripper_max_open/128*self.heightmap_size * gripper_state)
     anchor = self.heightmap_size//2
-    im[int(anchor - d // 2 - gripper_half_size//2):int(anchor - d // 2 + gripper_half_size//2), int(anchor - gripper_half_size):int(anchor + gripper_half_size)] = 1
-    im[int(anchor + d // 2 - gripper_half_size//2):int(anchor + d // 2 + gripper_half_size//2), int(anchor - gripper_half_size):int(anchor + gripper_half_size)] = 1
+    l = round(0.02/self.obs_size_m * self.heightmap_size/2)
+    w = round(0.015/self.obs_size_m * self.heightmap_size/2)
+    im[int(anchor - d // 2 - w):int(anchor - d // 2 + w), int(anchor - l):int(anchor + l)] = 1
+    im[int(anchor + d // 2 - w):int(anchor + d // 2 + w), int(anchor - l):int(anchor + l)] = 1
     im = rotate(im, np.rad2deg(gripper_rz), reshape=False, order=0)
     return im
 
@@ -417,7 +419,7 @@ if __name__ == '__main__':
   env_config = {'workspace': workspace, 'max_steps': 10, 'obs_size': 128, 'render': True, 'fast_mode': True,
                 'seed': 2, 'action_sequence': 'pxyzr', 'num_objects': 6, 'random_orientation': False,
                 'reward_type': 'step_left', 'simulate_grasp': True, 'perfect_grasp': False, 'robot': 'kuka',
-                'object_init_space_check': 'point', 'physics_mode': 'fast', 'object_scale_range': (1, 1)}
+                'object_init_space_check': 'point', 'physics_mode': 'fast', 'object_scale_range': (1, 1), 'view_type': 'camera_center_xyz'}
   planner_config = {'random_orientation': True}
   env = CloseLoopEnv(env_config)
   s, obs = env.reset()
