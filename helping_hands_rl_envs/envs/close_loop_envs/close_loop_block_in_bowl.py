@@ -6,6 +6,7 @@ from helping_hands_rl_envs.pybullet.utils import constants
 from helping_hands_rl_envs.planners.close_loop_block_in_bowl_planner import CloseLoopBlockInBowlPlanner
 from helping_hands_rl_envs.pybullet.utils.constants import NoValidPositionException
 from helping_hands_rl_envs.pybullet.equipments.tray import Tray
+import matplotlib.pyplot as plt
 
 class CloseLoopBlockInBowlEnv(CloseLoopEnv):
   def __init__(self, config):
