@@ -17,6 +17,7 @@ class CloseLoopBlockInBowlEnv(CloseLoopEnv):
     else:
       self.trans_bin = config['transparent_bin']
     self.tray = Tray()
+    self.object_init_z = 0.05
 
   def initialize(self):
     super().initialize()
