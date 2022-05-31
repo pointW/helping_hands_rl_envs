@@ -12,12 +12,16 @@ class CloseLoopBlockInBowlEnv(CloseLoopEnv):
   def __init__(self, config):
     super().__init__(config)
     self.bin_size = 0.25
-    # self.tray = Tray()
+    if 'transparent_bin' not in config:
+      self.trans_bin = False
+    else:
+      self.trans_bin = config['transparent_bin']
+    self.tray = Tray()
 
   def initialize(self):
     super().initialize()
-    # self.tray.initialize(pos=[self.workspace[0].mean(), self.workspace[1].mean(), 0],
-    #                      size=[self.bin_size, self.bin_size, 0.1])
+    self.tray.initialize(pos=[self.workspace[0].mean(), self.workspace[1].mean(), 0],
+                         size=[self.bin_size, self.bin_size, 0.1], transparent=self.trans_bin)
 
   def reset(self):
     while True:

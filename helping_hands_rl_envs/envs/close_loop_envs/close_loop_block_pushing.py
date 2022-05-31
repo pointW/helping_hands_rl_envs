@@ -18,12 +18,16 @@ class CloseLoopBlockPushingEnv(CloseLoopEnv):
     self.goal_grid_size_half = round(self.goal_size / self.heightmap_resolution / 2)
 
     self.bin_size = 0.25
+    if 'transparent_bin' not in config:
+      self.trans_bin = False
+    else:
+      self.trans_bin = config['transparent_bin']
     self.tray = Tray()
 
   def initialize(self):
     super().initialize()
     self.tray.initialize(pos=[self.workspace[0].mean(), self.workspace[1].mean(), 0],
-                         size=[self.bin_size, self.bin_size, 0.1])
+                         size=[self.bin_size, self.bin_size, 0.1], transparent=self.trans_bin)
 
 
   def getGoalPixel(self, gripper_pos=None):
