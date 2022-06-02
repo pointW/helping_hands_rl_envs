@@ -58,3 +58,5 @@ class TestBulletBowlStacking(unittest.TestCase):
       )
     env.close()
 
+if __name__ == "__main__":
+  TestBulletBowlStacking().testPlanner2()
