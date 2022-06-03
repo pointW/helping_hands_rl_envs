@@ -70,7 +70,8 @@ class CloseLoopBlockPushingEnv(CloseLoopEnv):
 
   def _checkTermination(self):
     obj_pos = self.objects[0].getPosition()[:2]
-    return np.linalg.norm(np.array(self.goal_pos) - np.array(obj_pos)) < 0.05
+    obj_pos_z = self.objects[0].getPosition()[2]
+    return (np.linalg.norm(np.array(self.goal_pos) - np.array(obj_pos)) < 0.05) and (obj_pos_z < 0.03) and (self._isHolding())
 
   def isSimValid(self):
     for obj in self.objects:
