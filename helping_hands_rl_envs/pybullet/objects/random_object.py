@@ -12,7 +12,7 @@ from helping_hands_rl_envs.pybullet.objects.pybullet_object import PybulletObjec
 from helping_hands_rl_envs.pybullet.utils import constants
 
 root_dir = os.path.dirname(helping_hands_rl_envs.__file__)
-obj_pattern = os.path.join(root_dir, constants.OBJECTS_PATH, 'random_urdfs/*/*.obj')
+obj_pattern = os.path.join(constants.OBJECTS_PATH, 'random_urdfs/*/*.obj')
 found_object_directories = glob.glob(obj_pattern)
 found_object_directories = list(filter(lambda x: re.search(r'(002|005|027|032|066|075|083'
                                                            r'|116|118|131|137|142|143|149|154|176|187'

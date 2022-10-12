@@ -12,7 +12,7 @@ from helping_hands_rl_envs.pybullet.utils import constants
 class Triangle(PybulletObject):
   def __init__(self, pos, rot, scale):
     root_dir = os.path.dirname(helping_hands_rl_envs.__file__)
-    urdf_filepath = os.path.join(root_dir, constants.OBJECTS_PATH, 'triangle.urdf')
+    urdf_filepath = os.path.join(constants.OBJECTS_PATH, 'triangle.urdf')
     object_id = pb.loadURDF(urdf_filepath, basePosition=pos, baseOrientation=rot, globalScaling=scale)
 
     super(Triangle, self).__init__(constants.TRIANGLE, object_id)

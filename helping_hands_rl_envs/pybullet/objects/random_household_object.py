@@ -12,7 +12,7 @@ from helping_hands_rl_envs.pybullet.objects.pybullet_object import PybulletObjec
 from helping_hands_rl_envs.pybullet.utils import constants
 
 root_dir = os.path.dirname(helping_hands_rl_envs.__file__)
-urdf_pattern = os.path.join(root_dir, constants.OBJECTS_PATH, 'random_household_object/*/*.urdf')
+urdf_pattern = os.path.join(constants.OBJECTS_PATH, 'random_household_object/*/*.urdf')
 found_object_directories = glob.glob(urdf_pattern)
 # found_object_directories = list(filter(lambda x: re.search(r'(flashlight)\.urdf', x),
 #                                        found_object_directories))

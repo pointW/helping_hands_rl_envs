@@ -13,7 +13,7 @@ from helping_hands_rl_envs.pybullet.utils import transformations
 class Brick(PybulletObject):
   def __init__(self, pos, rot, scale):
     root_dir = os.path.dirname(helping_hands_rl_envs.__file__)
-    urdf_filepath = os.path.join(root_dir, constants.OBJECTS_PATH, 'brick_small.urdf')
+    urdf_filepath = os.path.join(constants.OBJECTS_PATH, 'brick_small.urdf')
     object_id = pb.loadURDF(urdf_filepath, basePosition=pos, baseOrientation=rot, globalScaling=scale)
 
     super(Brick, self).__init__(constants.BRICK, object_id)

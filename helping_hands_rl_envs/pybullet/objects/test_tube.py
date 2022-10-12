@@ -57,7 +57,7 @@ class TestTube(PybulletObject):
     self.scale = scale
     root_dir = os.path.dirname(helping_hands_rl_envs.__file__)
     self.model_id = model_id
-    urdf_filepath = os.path.join(root_dir, constants.OBJECTS_PATH, 'test_tube/test_tube.urdf')
+    urdf_filepath = os.path.join(constants.OBJECTS_PATH, 'test_tube/test_tube.urdf')
     object_id = pb.loadURDF(urdf_filepath, basePosition=pos, baseOrientation=rot, globalScaling=scale)
 
     super(TestTube, self).__init__(constants.TEST_TUBE, object_id)

@@ -14,7 +14,7 @@ from helping_hands_rl_envs.pybullet.utils import constants
 from helping_hands_rl_envs.pybullet.objects.random_household_object_200_info import *
 
 root_dir = os.path.dirname(helping_hands_rl_envs.__file__)
-obj_pattern = os.path.join(root_dir, constants.OBJECTS_PATH, 'random_household_object_200/3dnet/*/*.obj')
+obj_pattern = os.path.join(constants.OBJECTS_PATH, 'random_household_object_200/3dnet/*/*.obj')
 found_object_directories = sorted(glob.glob(obj_pattern))
 total_num_objects = len(found_object_directories)
 
